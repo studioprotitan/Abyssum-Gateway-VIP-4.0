@@ -796,6 +796,7 @@ function init() {
   setupCamera();
   setupLights('combat');
   setupGround();
+  loadEnvironment();
   setupFPSCounter();
 
   engine.runRenderLoop(() => {
@@ -942,6 +943,23 @@ function setupGround() {
   mat.emissiveColor = new BABYLON.Color3(0.015, 0.04, 0.06);
   ground.material = mat;
   ground.isPickable = false;
+}
+
+// ── ENVIRONMENT BACKDROP ─────────────────────────────────────────
+function loadEnvironment() {
+  const bgUrl = "https://github.com/studioprotitan/AbyssumVIP/releases/download/forge_net_deploy_floor_viewer/scene-osu-mint-deploy-cam-01-a.babylon";
+  console.log('[VIEWER] Loading background environment from:', bgUrl);
+  
+  BABYLON.SceneLoader.ImportMeshAsync('', '', bgUrl, scene, null, '.babylon')
+    .then(result => {
+      console.log('[VIEWER] Background environment loaded successfully. Meshes:', result.meshes.length);
+      result.meshes.forEach(m => {
+        m.isPickable = false;
+      });
+    })
+    .catch(err => {
+      console.error('[VIEWER] Failed to load background environment:', err);
+    });
 }
 
 // ── FPS COUNTER ─────────────────────────────────────────────────
